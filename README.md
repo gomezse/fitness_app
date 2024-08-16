@@ -5,7 +5,7 @@
 
 - En el apartado de esquemas se encuentran fotos relacionadas al clon.
 
-[!NOTE]
+> [!NOTE]
 > Credenciales del login
  - user: **admin**
  - password: **admin**

@@ -7,5 +7,5 @@
 
 > [!NOTE]
 > Credenciales del login
- - user: **admin**
- - password: **admin**
+> - user: **admin**
+> - password: **admin**

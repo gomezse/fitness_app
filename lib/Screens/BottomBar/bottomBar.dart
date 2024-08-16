@@ -1,10 +1,9 @@
+import 'package:fitness_app/Screens/Favorites/favorite.dart';
 import 'package:fitness_app/Screens/Home/home.dart';
-import 'package:fitness_app/Screens/Intro/intro.dart';
-import 'package:fitness_app/Screens/Login/login.dart';
+import 'package:fitness_app/Screens/Menu/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-
 import '../../Route/block.navigation_bloc/navigation_bloc.dart';
 
 class BottombarPage extends StatefulWidget implements NavigationStates{
@@ -17,8 +16,8 @@ class BottombarPage extends StatefulWidget implements NavigationStates{
 List<Widget> _buildScreens (){
   return [
       HomePage(),
-      IntroPage(),
-      LoginPage()
+      MenuPage(),
+      FavoritePage()
   ];
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,8 +13,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DateTime _selectedDate = DateTime.now();
   int? _selectedDay;
-
-
 
   //-----------------------------CALENDAR--------------------------------------
   void _nextMonth() {
@@ -42,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           },
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 3.0),
-            padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 14.0),
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
             decoration: BoxDecoration(
               color: _selectedDay == i ? Colors.blue : Colors.grey[200],
               borderRadius: BorderRadius.circular(15.0),
@@ -86,31 +85,82 @@ class _HomePageState extends State<HomePage> {
       photo: 'assets/running.jpg',
     ),
   ];
-  double _width_popular_element=250;
-  double _height_popular_element=150;
+
   final List<Widget> _elements_popular = [
-    _category(photo: 'assets/popular_1.jpg',width: 220,height: 150),
-    _category(photo: 'assets/popular_2.jpg',width: 220,height: 150),
-    _category(photo: 'assets/popular_3.jpg',width: 220,height: 150),
-    _category(photo: 'assets/popular_4.jpg',width: 220,height: 150),
-    _category(photo: 'assets/popular_5.jpg',width: 220,height: 150),
-    _category(photo: 'assets/popular_6.jpg',width: 220,height: 150),
-    _category(photo: 'assets/popular_7.jpg',width: 220,height: 150),
-    _category(photo: 'assets/popular_8.jpg',width: 220,height: 150),
+    _category(photo: 'assets/popular_1.jpg', width: 220, height: 150),
+    _category(photo: 'assets/popular_2.jpg', width: 220, height: 150),
+    _category(photo: 'assets/popular_3.jpg', width: 220, height: 150),
+    _category(photo: 'assets/popular_4.jpg', width: 220, height: 150),
+    _category(photo: 'assets/popular_5.jpg', width: 220, height: 150),
+    _category(photo: 'assets/popular_6.jpg', width: 220, height: 150),
+    _category(photo: 'assets/popular_7.jpg', width: 220, height: 150),
+    _category(photo: 'assets/popular_8.jpg', width: 220, height: 150),
   ];
+  final List<String> _listaDeVideos = [
+    'https://www.youtube.com/watch?v=UItWltVZZmE',     // Día 1
+    'https://www.youtube.com/watch?v=p-uUnrCdhR8',    // Día 2
+    'https://www.youtube.com/watch?v=FeR-4_Opt-g',    // Día 3
+    'https://www.youtube.com/watch?v=UBMk30rjy0o',   // Día 4
+    'https://www.youtube.com/watch?v=Eik9mXj5vbA',   // Día 5
+    'https://www.youtube.com/watch?v=Eyu6dUVVmU0',   // Día 6
+    'https://www.youtube.com/watch?v=1f8yoFFdkcY',   // Día 7
+    'https://www.youtube.com/watch?v=Cw-Wt4xKD2s',   // Día 8
+    'https://www.youtube.com/watch?v=AUTqIj21X7g',   // Día 9
+    'https://www.youtube.com/watch?v=-CQaTP8crjA',   // Día 10
+    'https://www.youtube.com/watch?v=UItWltVZZmE',     // Día 11
+    'https://www.youtube.com/watch?v=p-uUnrCdhR8',    // Día 12
+    'https://www.youtube.com/watch?v=FeR-4_Opt-g',    // Día 13
+    'https://www.youtube.com/watch?v=UBMk30rjy0o',   // Día 14
+    'https://www.youtube.com/watch?v=Eik9mXj5vbA',   // Día 15
+    'https://www.youtube.com/watch?v=Eyu6dUVVmU0',   // Día 16
+    'https://www.youtube.com/watch?v=1f8yoFFdkcY',   // Día 17
+    'https://www.youtube.com/watch?v=Cw-Wt4xKD2s',   // Día 18
+    'https://www.youtube.com/watch?v=AUTqIj21X7g',   // Día 19
+    'https://www.youtube.com/watch?v=-CQaTP8crjA',   // Día 20
+    'https://www.youtube.com/watch?v=UItWltVZZmE',     // Día 21
+    'https://www.youtube.com/watch?v=p-uUnrCdhR8',    // Día 22
+    'https://www.youtube.com/watch?v=FeR-4_Opt-g',    // Día 23
+    'https://www.youtube.com/watch?v=UBMk30rjy0o',   // Día 24
+    'https://www.youtube.com/watch?v=Eik9mXj5vbA',   // Día 25
+    'https://www.youtube.com/watch?v=Eyu6dUVVmU0',   // Día 26
+    'https://www.youtube.com/watch?v=1f8yoFFdkcY',   // Día 27
+    'https://www.youtube.com/watch?v=Cw-Wt4xKD2s',   // Día 28
+    'https://www.youtube.com/watch?v=AUTqIj21X7g',   // Día 29
+    'https://www.youtube.com/watch?v=-CQaTP8crjA',   // Día 30
+    'https://www.youtube.com/watch?v=UItWltVZZmE',     // Día 31
+  ];
+
+
+  Widget _getSessionForSelectedDay() {
+    if (_selectedDay == null) {
+      _selectedDay = 1;
+    }
+
+    YoutubePlayerController _youtubePlayerController = YoutubePlayerController(
+      initialVideoId: YoutubePlayer.convertUrlToId(_listaDeVideos[_selectedDay! - 1])!,
+      flags: YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+      ),
+    );
+
+    return _sessionCard(
+      title: 'Session for Day $_selectedDay',
+      videoUrl: _listaDeVideos[_selectedDay! - 1],
+      day: _selectedDay!,
+      youtubePlayerController: _youtubePlayerController,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-                    'My training Plan',
-                style:TextStyle(
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.5
-                )
-                  ),
+          'My training Plan',
+          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.5),
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -142,22 +192,19 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(height: 20),
-              _title_section(title:'Today Sessions'),
-              _horizontal_list(elements: _elements_categories),
-              SizedBox(height: 50),
-              _title_section(title:'Categories'),
+              _title_section(title: 'Today Sessions'),
+              _getSessionForSelectedDay(),
+              SizedBox(height: 20),
+              _title_section(title: 'Categories'),
               SizedBox(height: 10),
               _horizontal_list(elements: _elements_categories),
-              SizedBox(height: 50),
-              _title_section(title:'Popular'),
+              SizedBox(height: 30),
+              _title_section(title: 'Popular'),
               _horizontal_list(elements: _elements_popular),
-              SizedBox(height: 50),
-
-
             ],
           ),
         ),
-      )
+      ),
     );
   }
 }
@@ -182,33 +229,29 @@ class _horizontal_list extends StatelessWidget {
 }
 
 class _title_section extends StatelessWidget {
-  const _title_section({
-    super.key,
-    required title
-  }):_title=title;
+  const _title_section({super.key, required title}) : _title = title;
 
-  final  String _title;
+  final String _title;
 
   @override
-
   Widget build(BuildContext context) {
     return Container(
-      padding:EdgeInsets.symmetric(vertical: 3.0,horizontal: 7.0),
+      padding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 7.0),
       alignment: Alignment.centerLeft,
-      child: Text(_title,
+      child: Text(
+        _title,
         textAlign: TextAlign.start,
-      style: GoogleFonts.poppins(
-
-          color:Colors.black,
+        style: TextStyle(
+          color: Colors.black,
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          letterSpacing: 0.8)
-                ,),
+          letterSpacing: 0.8,
+          fontFamily: 'Poppins',
+        ),
+      ),
     );
   }
 }
-
-
 
 class _category extends StatelessWidget {
   const _category({
@@ -238,7 +281,7 @@ class _category extends StatelessWidget {
               ),
               fit: BoxFit.cover,
             ),
-        borderRadius: BorderRadius.circular(10.0)
+            borderRadius: BorderRadius.circular(10.0)
         ),
         height: _height,
         width: _width,
@@ -264,7 +307,7 @@ class _category extends StatelessWidget {
                   textAlign: TextAlign.start,
                   style: GoogleFonts.poppins(
                       color:Colors.black,
-                      fontSize: 14,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.7)
                   ,
@@ -274,6 +317,55 @@ class _category extends StatelessWidget {
 
           ],
         )
+    );
+  }
+}
+
+
+class _sessionCard extends StatelessWidget {
+  final String title;
+  final String videoUrl;
+  final int day;
+  final YoutubePlayerController youtubePlayerController;
+
+  const _sessionCard({
+    Key? key,
+    required this.title,
+    required this.videoUrl,
+    required this.day,
+    required this.youtubePlayerController,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: YoutubePlayer(
+              controller: youtubePlayerController,
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: Colors.blueAccent,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
